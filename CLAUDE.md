@@ -7,9 +7,11 @@ HashStore is a React Native mobile application built with Expo SDK 52 (migrated 
 
 ## Migration Status
 - ✅ Updated from Expo SDK 32 to SDK 52
-- ✅ Migrated React Navigation from v3 to v7
+- ✅ **MIGRATED TO EXPO ROUTER**: Switched from React Navigation v7 to Expo Router (file-based routing)
 - ✅ Updated font loading to use config plugins
 - ✅ Updated deprecated Expo APIs (SecureStore, KeepAwake)
+- ✅ Implemented authentication context with route protection
+- ✅ Created file-based routing structure with groups
 - ⚠️ NativeBase v3 has compatibility issues (deprecated, use gluestack-ui for new development)
 - ⚠️ Facebook authentication disabled (needs migration to react-native-fbsdk-next)
 - ⚠️ Some packages may need further updates for full compatibility
@@ -23,15 +25,38 @@ HashStore is a React Native mobile application built with Expo SDK 52 (migrated 
 
 ## Architecture & Structure
 
-### Navigation System
-The app uses React Navigation v3 with a sophisticated multi-level navigation structure:
-- **Switch Navigator** at root level handles authentication states (SignedOut/SignedIn/SignedInBusiness)
-- **Tab Navigators** for main app sections (different layouts for regular users vs business users)
-- **Stack Navigators** for each tab section to handle screen hierarchy
+### Routing System (Expo Router)
+The app now uses Expo Router with file-based routing for a modern, intuitive navigation structure:
 
-Key navigation files:
-- `Navigation.js` - Contains all navigation configuration and routing logic
-- Navigation state is determined by user authentication type (0=signed out, 1=signed in, 2=business user)
+**File Structure**:
+```
+app/
+├── _layout.tsx                 # Root layout with AuthProvider
+├── index.tsx                   # Main route handler and authentication router
+├── auth/
+│   ├── AuthContext.tsx         # Authentication context and providers
+│   └── _layout.tsx            # Auth-specific layout
+├── (auth)/                     # Authentication group (signed out users)
+│   ├── _layout.tsx            # Auth layout
+│   └── login.tsx              # Login screen
+├── (tabs)/                     # Regular user tab navigation
+│   ├── _layout.tsx            # Tab layout for regular users
+│   ├── home.tsx               # Home screen
+│   ├── search.tsx             # Search screen
+│   └── profile.tsx            # Profile screen
+└── (business)/                 # Business user tab navigation
+    ├── _layout.tsx            # Tab layout for business users
+    ├── home.tsx               # Home screen (business)
+    ├── search.tsx             # Search screen (business)
+    ├── manage-media.tsx       # Media management (business only)
+    └── profile.tsx            # Profile screen (business)
+```
+
+**Key Features**:
+- **Authentication Flow**: Handled by AuthContext with automatic route protection
+- **Group Routes**: Parentheses create route groups without affecting URL structure
+- **Tab Navigation**: Separate tab layouts for regular users vs business users
+- **Deep Linking**: Automatic deep linking support with scheme `hashstore://`
 
 ### Authentication & API Integration
 - Uses Expo SecureStore for token management
