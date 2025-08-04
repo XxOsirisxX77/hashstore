@@ -1,7 +1,9 @@
 import React from 'react';
 import { Text, View, Button, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {createBottomTabNavigator, createStackNavigator, createAppContainer, createSwitchNavigator} from 'react-navigation';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import ProfileScreen from './views/Profile';
 import ViewProfileScreen from './views/ViewProfile';
@@ -17,242 +19,178 @@ import HomeScreen from './views/Home'
 
 import ProfileSideMenu from './views/ProfileSideMenu';
 
-class IconWithBadge extends React.Component {
-  render() {
-    const { name, badgeCount, color, size } = this.props;
-    return (
-      <View style={{ width: 24, height: 24, margin: 5 }}>
-        <Ionicons name={name} size={size} color={color} />
-        {badgeCount > 0 && (
-          <View
-            style={{
-              // /If you're using react-native < 0.57 overflow outside of the parent
-              // will not work on Android, see https://git.io/fhLJ8
-              position: 'absolute',
-              right: -6,
-              top: -3,
-              backgroundColor: 'red',
-              borderRadius: 6,
-              width: 12,
-              height: 12,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
-              {badgeCount}
-            </Text>
-          </View>
-        )}
-      </View>
-    );
-  }
-}
+const IconWithBadge = ({ name, badgeCount, color, size }) => {
+  return (
+    <View style={{ width: 24, height: 24, margin: 5 }}>
+      <Icon name={name} size={size} color={color} />
+      {badgeCount > 0 && (
+        <View
+          style={{
+            position: 'absolute',
+            right: -6,
+            top: -3,
+            backgroundColor: 'red',
+            borderRadius: 6,
+            width: 12,
+            height: 12,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={{ color: 'white', fontSize: 10, fontWeight: 'bold' }}>
+            {badgeCount}
+          </Text>
+        </View>
+      )}
+    </View>
+  );
+};
 
-const HomeIconWithBadge = props => {
-  // You should pass down the badgeCount in some other ways like context, redux, mobx or event emitters.
+const HomeIconWithBadge = (props) => {
   return <IconWithBadge {...props} badgeCount={3} />;
 };
 
-const getTabBarIcon = (navigation, focused, tintColor) => {
-  const { routeName } = navigation.state;
-  let IconComponent = Ionicons;
-  let iconName;
-  if (routeName === 'Home') {
-    iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-    // We want to add badges to home tab icon
-    IconComponent = HomeIconWithBadge;
-  } else if (routeName === 'Settings') {
-    iconName = `ios-options${focused ? '' : '-outline'}`;
-  }
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-  // You can return any component that you like here!
-  return <IconComponent name={iconName} size={25} color={tintColor} />;
+const SignedOutStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} />
+    </Stack.Navigator>
+  );
 };
 
-  const SignedOutStack = createStackNavigator({
-    Login: { screen: LoginScreen }
-  });
-
-  const MenuButton = (props) => {
-  	return (
-    	<View>
-        <Icon.Button name="bars" backgroundColor="transparent" onPress={() => { props.navigation.toggleDrawer() } }/>
-    	</View>
-    );
-  };
-
-  const HomeStack = createStackNavigator({
-    Home: { screen: HomeScreen },
-    ViewMediaDetail: { screen: ViewMediaDetailScreen },
-    ViewProfile: { screen: ViewProfileScreen },
-  });
-
-  const ProfileStack = createStackNavigator({
-    Profile: { screen: ProfileScreen },
-    MediaDetail: { screen: MediaDetailScreen },
-    UpdateMedia: { screen: UpdateMediaScreen },
-    BusinessRegister: { screen: BusinessRegisterScreen },
-    ViewMediaDetail: { screen: ViewMediaDetailScreen },
-    ViewProfile: { screen: ViewProfileScreen },
-  });
-
-  const ManageMediaStack = createStackNavigator({
-    ManageMedia: { screen: ManageMediaScreen },
-    ReviewMedia: { screen: ReviewMediaScreen }
-  });
-
-  const SearchStack = createStackNavigator({
-    Search: { screen: SearchScreen },
-    ViewMediaDetail: { screen: ViewMediaDetailScreen },
-    ViewProfile: { screen: ViewProfileScreen },
-  });
-
-  const SignedInBusinessTabNavigator = createBottomTabNavigator(
-    {
-      Home: {
-        screen: HomeStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="home" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-      Search: {
-        screen: SearchStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="search" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-      ManageMedia: {
-        screen: ManageMediaStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="plus" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-      Profile: {
-        screen: ProfileStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="user-circle" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-    },
-    {
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        if (routeName === "ManageMedia") {
-          // iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-          iconName = "home";
-        } else if (routeName === "Profile") {
-          iconName = "account";
-        }
-        // You can return any component that you like here! We usually use an
-        // icon component from react-native-vector-icons
-        return <Icon name={iconName} size={25} color={tintColor} />;
-      }
-    })
-    }
+const MenuButton = (props) => {
+  return (
+    <View>
+      <Icon.Button name="bars" backgroundColor="transparent" onPress={() => { props.navigation.toggleDrawer() } }/>
+    </View>
   );
+};
 
-  const SignedInTabNavigator = createBottomTabNavigator(
-    {
-      Home: {
-        screen: HomeStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="home" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-      Search: {
-        screen: SearchStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="search" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-      Profile: {
-        screen: ProfileStack,
-        navigationOptions: {
-          tabBarLabel: " ",
-          tabBarIcon: ({ focused, tintColor }) => {
-            if (focused) {
-              tintColor = 'rgba(189, 37, 60, 0.90)';
-            }
-            return <Icon name="user-circle" style={{marginTop: 5}} size={25} color={tintColor}/>;
-          },
-        }
-      },
-
-    },
-    {
-    navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName;
-        return <Icon name={iconName} size={25} color={tintColor} />;
-      }
-    })
-    }
+const HomeStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="ViewMediaDetail" component={ViewMediaDetailScreen} />
+      <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
+    </Stack.Navigator>
   );
+};
 
-const createRootLayout = (signedInType) => {
-  return createSwitchNavigator(
-    {
-      SignedIn: {
-        screen: SignedInTabNavigator
-      },
-      SignedInBusiness: {
-        screen: SignedInBusinessTabNavigator
-      },
-      SignedOut: {
-        screen: SignedOutStack
-      }
-    },
-    {
-      initialRouteName: signedInType == 0 ? "SignedOut" : signedInType == 1 ? "SignedIn" : signedInType == 2 ? "SignedInBusiness" : "SignedOut"
-    }
-  )
+const ProfileStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Profile" component={ProfileScreen} />
+      <Stack.Screen name="MediaDetail" component={MediaDetailScreen} />
+      <Stack.Screen name="UpdateMedia" component={UpdateMediaScreen} />
+      <Stack.Screen name="BusinessRegister" component={BusinessRegisterScreen} />
+      <Stack.Screen name="ViewMediaDetail" component={ViewMediaDetailScreen} />
+      <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const ManageMediaStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="ManageMedia" component={ManageMediaScreen} />
+      <Stack.Screen name="ReviewMedia" component={ReviewMediaScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const SearchStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="ViewMediaDetail" component={ViewMediaDetailScreen} />
+      <Stack.Screen name="ViewProfile" component={ViewProfileScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const SignedInBusinessTabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
+          const tintColor = focused ? 'rgba(189, 37, 60, 0.90)' : color;
+          
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Search') {
+            iconName = 'search';
+          } else if (route.name === 'ManageMedia') {
+            iconName = 'plus';
+          } else if (route.name === 'Profile') {
+            iconName = 'user-circle';
+          }
+          
+          return <Icon name={iconName} style={{marginTop: 5}} size={25} color={tintColor} />;
+        },
+        tabBarLabel: ' ',
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Search" component={SearchStack} />
+      <Tab.Screen name="ManageMedia" component={ManageMediaStack} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
+    </Tab.Navigator>
+  );
+};
+
+const SignedInTabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
+          const tintColor = focused ? 'rgba(189, 37, 60, 0.90)' : color;
+          
+          if (route.name === 'Home') {
+            iconName = 'home';
+          } else if (route.name === 'Search') {
+            iconName = 'search';
+          } else if (route.name === 'Profile') {
+            iconName = 'user-circle';
+          }
+          
+          return <Icon name={iconName} style={{marginTop: 5}} size={25} color={tintColor} />;
+        },
+        tabBarLabel: ' ',
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeStack} />
+      <Tab.Screen name="Search" component={SearchStack} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
+    </Tab.Navigator>
+  );
+};
+
+const RootNavigator = ({ signedInType }) => {
+  let component;
+  
+  if (signedInType === 0) {
+    component = SignedOutStack;
+  } else if (signedInType === 1) {
+    component = SignedInTabNavigator;
+  } else if (signedInType === 2) {
+    component = SignedInBusinessTabNavigator;
+  } else {
+    component = SignedOutStack;
+  }
+  
+  return React.createElement(component);
 };
 
 export const AppContainer = (signedInType = 0) => {
-   return createAppContainer(createRootLayout(signedInType));
- }
+  return (
+    <NavigationContainer>
+      <RootNavigator signedInType={signedInType} />
+    </NavigationContainer>
+  );
+};

@@ -21,7 +21,8 @@ import { getCategories } from '../services/CategoryService'
 import { globalStyles, globalScaledStyles } from '../styles/GlobalStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { commonNavigationOptions } from './CommonScreen';
-import { Facebook } from 'expo';
+// TODO: Replace with react-native-fbsdk-next for Facebook authentication
+// import { Facebook } from 'expo';
 import TableCell from '../components/TableCell';
 import { ScaledSheet } from 'react-native-size-matters';
 
@@ -160,6 +161,10 @@ class BusinessRegisterScreen extends React.Component {
   }
 
   createBusiness = async () => {
+    // TODO: Implement Facebook authentication using react-native-fbsdk-next
+    Alert.alert("Facebook Authentication", "Facebook login needs to be implemented with react-native-fbsdk-next");
+    
+    /* COMMENTED OUT - Needs migration to react-native-fbsdk-next
     try {
       const {
         type,
@@ -193,6 +198,7 @@ class BusinessRegisterScreen extends React.Component {
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
     }
+    */
   }
 
   render() {

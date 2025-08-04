@@ -2,7 +2,6 @@ import React from 'react';
 import { AppContainer } from './Navigation';
 import { obtainInstagramToken } from './services/AuthService';
 import { getProfileFromDatabaseAsync } from './services/UserService';
-import { Font } from 'expo';
 
 export default class App extends React.Component {
 
@@ -16,13 +15,6 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
-    await Font.loadAsync({
-      'SukhumvitSet-Bold': require('./assets/fonts/sukhumvit/SukhumvitSet-Bold.ttf'),
-      'SukhumvitSet-Light': require('./assets/fonts/sukhumvit/SukhumvitSet-Light.ttf'),
-      'SukhumvitSet-Medium': require('./assets/fonts/sukhumvit/SukhumvitSet-Medium.ttf'),
-      'SukhumvitSet-Thin': require('./assets/fonts/sukhumvit/SukhumvitSet-Thin.ttf'),
-    });
-
     obtainInstagramToken()
       .then(async (result) => {
         let signedInType = result !== null ? 1 : 0;
@@ -51,9 +43,7 @@ export default class App extends React.Component {
     if (!isCheckedSignedIn) {
       return null;
     }
-    const Layout = AppContainer(signedInType);
-    return (
-        <Layout/>
-    );
+    
+    return AppContainer(signedInType);
   }
 }

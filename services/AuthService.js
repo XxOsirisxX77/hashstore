@@ -1,4 +1,4 @@
-import { SecureStore } from 'expo';
+import * as SecureStore from 'expo-secure-store';
 
 const INSTAGRAM_USER_KEY = "instagram_token";
 

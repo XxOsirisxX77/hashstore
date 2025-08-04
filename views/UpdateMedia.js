@@ -13,7 +13,7 @@ import {
   Modal
 } from 'react-native';
 import { obtainInstagramToken } from '../services/AuthService';
-import { NavigationActions, StackActions } from 'react-navigation';
+import { CommonActions } from '@react-navigation/native';
 import { Platform } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { publishMediaToStore, updateMedia } from '../services/MediaService'
@@ -111,16 +111,14 @@ class UpdateMediaScreen extends React.Component {
   }
 
   resetStack = () => {
-   this.props
-     .navigation
-     .dispatch(StackActions.reset({
-       index: 0,
-       actions: [
-         NavigationActions.navigate({
-           routeName: 'Profile'
-         }),
-       ],
-     }))
+    this.props.navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: 'Profile' }
+        ],
+      })
+    )
   };
 
   updatePrice = (media, text) => {

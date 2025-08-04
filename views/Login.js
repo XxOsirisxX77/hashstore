@@ -72,7 +72,7 @@ class LoginScreen extends React.Component {
           </TouchableOpacity>
           <InstagramLogin
               ref= {ref => this.instagramLogin= ref}
-              clientId='b6a9c039ffd849daa916f510330a5e4c'
+              appId='b6a9c039ffd849daa916f510330a5e4c'
               redirectUrl='http://localhost:8080/users/instagram_access'
               scopes={['public_content', 'follower_list']}
               onLoginSuccess={(token) => this.login(token)}

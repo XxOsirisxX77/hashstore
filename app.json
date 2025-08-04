@@ -1,29 +1,55 @@
 {
   "expo": {
-    "name": "HinStore",
-    "slug": "HinStore",
+    "name": "HashStore",
+    "slug": "hashstore",
     "privacy": "public",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "52.0.0",
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "web"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "./assets/fonts/sukhumvit/SukhumvitSet-Bold.ttf",
+            "./assets/fonts/sukhumvit/SukhumvitSet-Light.ttf",
+            "./assets/fonts/sukhumvit/SukhumvitSet-Medium.ttf",
+            "./assets/fonts/sukhumvit/SukhumvitSet-SemiBold.ttf",
+            "./assets/fonts/sukhumvit/SukhumvitSet-Text.ttf",
+            "./assets/fonts/sukhumvit/SukhumvitSet-Thin.ttf"
+          ]
+        }
+      ]
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.hashstore"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.yourcompany.hashstore"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
     }
   }
 }

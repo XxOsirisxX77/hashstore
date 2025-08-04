@@ -5,7 +5,7 @@ import { getPopularCategories, getDiscoverStores } from '../services/HomeService
 import { commonNavigationOptions } from './CommonScreen';
 import { globalStyles, globalScaledStyles } from '../styles/GlobalStyle';
 import { setPopularCategory } from '../services/HomeSearchNavigationHack';
-import { KeepAwake } from 'expo';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import { ScaledSheet } from 'react-native-size-matters';
 
 class HomeScreen extends React.Component {
@@ -77,15 +77,18 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
+    activateKeepAwake();
     this.loadCategories();
     this.loadDiscoveryStores();
   }
 
-  render() {
+  componentWillUnmount() {
+    deactivateKeepAwake();
+  }
 
+  render() {
     return (
       <View style={[styles.mainContainer]}>
-        <KeepAwake />
         <StatusBar barStyle="light-content" />
         <View style={[styles.popularContainer]}>
           <Text style={[globalScaledStyles.textBoldRegular, styles.popularCategoryHeaderText]}>

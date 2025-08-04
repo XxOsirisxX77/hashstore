@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   Modal
 } from 'react-native';
-import { NavigationActions, StackActions, Header } from 'react-navigation';
+import { CommonActions } from '@react-navigation/native';
 import { Platform } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { getProfileFromDatabaseAsync } from '../services/UserService';
@@ -136,16 +136,14 @@ class ReviewMediaScreen extends React.Component {
   }
 
   resetStack = () => {
-   this.props
-     .navigation
-     .dispatch(StackActions.reset({
-       index: 0,
-       actions: [
-         NavigationActions.navigate({
-           routeName: 'ManageMedia'
-         }),
-       ],
-     }))
+    this.props.navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: 'ManageMedia' }
+        ],
+      })
+    );
   };
 
   updatePrice = (item, text) => {

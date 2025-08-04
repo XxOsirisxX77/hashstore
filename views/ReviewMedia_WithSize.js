@@ -13,7 +13,7 @@ import {
   ScrollView
 } from 'react-native';
 import { obtainInstagramToken } from '../services/AuthService';
-import { NavigationActions, StackActions, Header } from 'react-navigation';
+import { CommonActions } from '@react-navigation/native';
 import { Platform } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { Picker, Item } from 'native-base';
@@ -68,16 +68,14 @@ class ReviewMediaScreen extends React.Component {
   }
 
   resetStack = () => {
-   this.props
-     .navigation
-     .dispatch(StackActions.reset({
-       index: 0,
-       actions: [
-         NavigationActions.navigate({
-           routeName: 'ManageMedia'
-         }),
-       ],
-     }))
+    this.props.navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          { name: 'ManageMedia' }
+        ],
+      })
+    )
   };
 
   updatePrice = (item, text) => {
